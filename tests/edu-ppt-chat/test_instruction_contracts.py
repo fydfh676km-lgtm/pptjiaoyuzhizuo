@@ -105,6 +105,49 @@ class SkillContractTests(unittest.TestCase):
         ):
             self.assertNotIn(forbidden, combined)
 
+    def test_validation_contract_covers_cross_output_repairs(self):
+        validation = (SKILL_DIR / "references" / "validation.md").read_text(
+            encoding="utf-8"
+        )
+        for phrase in (
+            "页码连续",
+            "材料覆盖",
+            "事实依据",
+            "教学时长",
+            "跨产物一致性",
+            "只修复受影响的产物",
+            "重新执行完整检查",
+        ):
+            self.assertIn(phrase, validation)
+
+    def test_all_references_are_routed_and_no_scaffold_markers_remain(self):
+        skill = self.load_skill_text()
+        for name in (
+            "workflow.md",
+            "teaching.md",
+            "deliverables.md",
+            "visual.md",
+            "validation.md",
+        ):
+            self.assertIn(name, skill)
+
+        combined = "\n".join(
+            path.read_text(encoding="utf-8")
+            for path in SKILL_DIR.rglob("*.*")
+            if path.is_file()
+        )
+        markers = (
+            "T" + "BD",
+            "T" + "ODO",
+            "implement " + "later",
+            "fill in " + "details",
+        )
+        for marker in markers:
+            self.assertNotIn(marker, combined)
+
+    def test_skill_has_no_runtime_scripts(self):
+        self.assertFalse((SKILL_DIR / "scripts").exists())
+
 
 if __name__ == "__main__":
     unittest.main()
