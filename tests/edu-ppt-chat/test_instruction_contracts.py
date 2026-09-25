@@ -80,6 +80,31 @@ class SkillContractTests(unittest.TestCase):
         self.assertIn("补充内容", teaching)
         self.assertIn("待核实", teaching)
 
+    def test_visual_reference_and_image_generation_boundaries(self):
+        visual = (SKILL_DIR / "references" / "visual.md").read_text(
+            encoding="utf-8"
+        )
+        for phrase in (
+            "两个原创视觉方向",
+            "只提取抽象视觉规律",
+            "用户明确要求背景参考图",
+            "1–2 张",
+            "最多自动重试 1 次",
+            "不得阻断文本流程",
+        ):
+            self.assertIn(phrase, visual)
+
+    def test_removed_external_routes_are_not_dependencies(self):
+        combined = "\n".join(
+            path.read_text(encoding="utf-8") for path in SKILL_DIR.rglob("*.md")
+        )
+        for forbidden in (
+            "$smartedu-numbered-lesson-reader",
+            "$frontend-slides",
+            "references/wps.md",
+        ):
+            self.assertNotIn(forbidden, combined)
+
 
 if __name__ == "__main__":
     unittest.main()
