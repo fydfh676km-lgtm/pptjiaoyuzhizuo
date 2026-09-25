@@ -45,6 +45,41 @@ class SkillContractTests(unittest.TestCase):
         for label in ("教材", "教学要求", "教学设计", "参考图"):
             self.assertIn(label, workflow)
 
+    def test_exact_output_labels_are_present(self):
+        text = (SKILL_DIR / "references" / "deliverables.md").read_text(
+            encoding="utf-8"
+        )
+        labels = (
+            "页面标题：",
+            "页面文字：",
+            "画面风格：",
+            "添加元素：",
+            "文字字体与重点标注：",
+            "布局排版：",
+            "教学目标",
+            "教学重点",
+            "教学难点",
+            "教学过程",
+            "教师活动",
+            "学生活动",
+            "评价要点",
+            "板书设计",
+            "教师讲述",
+            "课堂提问",
+            "预设回答",
+            "教师点拨",
+            "过渡语",
+        )
+        for label in labels:
+            self.assertIn(label, text)
+
+    def test_material_only_facts_rule_is_present(self):
+        teaching = (SKILL_DIR / "references" / "teaching.md").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("补充内容", teaching)
+        self.assertIn("待核实", teaching)
+
 
 if __name__ == "__main__":
     unittest.main()
