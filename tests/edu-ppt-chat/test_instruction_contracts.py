@@ -45,6 +45,15 @@ class SkillContractTests(unittest.TestCase):
         for label in ("教材", "教学要求", "教学设计", "参考图"):
             self.assertIn(label, workflow)
 
+    def test_visual_second_approval_is_conditional_when_deselected(self):
+        workflow = (SKILL_DIR / "references" / "workflow.md").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn(
+            "只有视觉蓝图被保留或用户明确要求背景参考图时",
+            workflow,
+        )
+
     def test_exact_output_labels_are_present(self):
         text = (SKILL_DIR / "references" / "deliverables.md").read_text(
             encoding="utf-8"
