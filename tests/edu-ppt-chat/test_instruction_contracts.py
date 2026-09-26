@@ -45,6 +45,25 @@ class SkillContractTests(unittest.TestCase):
         for label in ("教材", "教学要求", "教学设计", "参考图"):
             self.assertIn(label, workflow)
 
+    def test_multiple_periods_are_merged_into_one_delivery_set(self):
+        skill = self.load_skill_text()
+        workflow = (SKILL_DIR / "references" / "workflow.md").read_text(
+            encoding="utf-8"
+        )
+        deliverables = (SKILL_DIR / "references" / "deliverables.md").read_text(
+            encoding="utf-8"
+        )
+        validation = (SKILL_DIR / "references" / "validation.md").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn("无论参考材料包含几个课时", skill)
+        self.assertIn("课时只作为内部教学阶段", workflow)
+        self.assertIn("一套连续的 PPT 页纲", deliverables)
+        self.assertIn("一份整体教学设计", deliverables)
+        self.assertIn("一份逐页连续的逐字稿", deliverables)
+        self.assertIn("不得按课时拆分", validation)
+
     def test_visual_second_approval_is_conditional_when_deselected(self):
         workflow = (SKILL_DIR / "references" / "workflow.md").read_text(
             encoding="utf-8"
