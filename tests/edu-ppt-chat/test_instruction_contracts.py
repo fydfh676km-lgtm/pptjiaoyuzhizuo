@@ -64,6 +64,24 @@ class SkillContractTests(unittest.TestCase):
         self.assertIn("一份逐页连续的逐字稿", deliverables)
         self.assertIn("不得按课时拆分", validation)
 
+    def test_default_page_count_is_capped_and_overflow_is_disclosed(self):
+        skill = self.load_skill_text()
+        workflow = (SKILL_DIR / "references" / "workflow.md").read_text(
+            encoding="utf-8"
+        )
+        deliverables = (SKILL_DIR / "references" / "deliverables.md").read_text(
+            encoding="utf-8"
+        )
+        validation = (SKILL_DIR / "references" / "validation.md").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn("用户未明确指定页数时", skill)
+        self.assertIn("默认不得超过 30 页", workflow)
+        self.assertIn("第一次确认前", workflow)
+        self.assertIn("不得静默删减", deliverables)
+        self.assertIn("30 页限制", validation)
+
     def test_visual_second_approval_is_conditional_when_deselected(self):
         workflow = (SKILL_DIR / "references" / "workflow.md").read_text(
             encoding="utf-8"
